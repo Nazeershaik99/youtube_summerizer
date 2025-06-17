@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouTube Summarizer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6 relative">
+
+  <!-- Main Container -->
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-8 space-y-6">
+    <h1 class="text-3xl font-bold text-center">🎬 YouTube Video Summarizer</h1>
+    
+    <form id="summaryForm" class="space-y-4">
+      <input type="text" name="youtube_url" id="youtube_url" placeholder="Paste YouTube URL" class="w-full border px-4 py-2 rounded" required>
+      
+      <select name="language" class="w-full border px-4 py-2 rounded">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="bn">Bengali</option>
+        <option value="ta">Tamil</option>
+      </select>
+      
+      <select name="summary_style" class="w-full border px-4 py-2 rounded">
+        <option value="Default">Default</option>
+        <option value="Informal">Informal</option>
+        <option value="Academic">Academic</option>
+        <option value="Creative">Creative</option>
+      </select>
+      
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded w-full">
+        Summarize
+      </button>
+    </form>
+
+    <!-- Video Embed -->
+    <div id="videoContainer" class="mt-6 hidden">
+      <iframe id="videoFrame" width="100%" height="360" class="rounded-lg" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <!-- Summary Result -->
+    <div id="summaryResult" class="whitespace-pre-line text-lg mt-4 hidden"></div>
+
+    <!-- Download Button -->
+    <div class="mt-6 hidden" id="downloadBtnContainer">
+      <a href="/download-pdf" class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+        📥 Download Summary as PDF
+      </a>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div id="loadingSpinner" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const form = document.getElementById('summaryForm');
+    const videoContainer = document.getElementById('videoContainer');
+    const videoFrame = document.getElementById('videoFrame');
+    const summaryDiv = document.getElementById('summaryResult');
+    const downloadBtnContainer = document.getElementById('downloadBtnContainer');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      loadingSpinner.classList.remove('hidden');
+
+      const formData = new FormData(form);
+      try {
+        const res = await fetch('/summarize', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        if (data.summary) {
+          const videoId = new URL(data.video_url).searchParams.get('v');
+          videoFrame.src = `https://www.youtube.com/embed/${videoId}`;
+          videoContainer.classList.remove('hidden');
+          summaryDiv.textContent = data.summary;
+          summaryDiv.classList.remove('hidden');
+          downloadBtnContainer.classList.remove('hidden');
+        } else {
+          summaryDiv.textContent = '❌ Failed to generate summary.';
+          summaryDiv.classList.remove('hidden');
+        }
+      } catch (error) {
+        summaryDiv.textContent = '❌ Error during processing.';
+        summaryDiv.classList.remove('hidden');
+      } finally {
+        loadingSpinner.classList.add('hidden');
+      }
+    };
+  </script>
+</body>
+</html>

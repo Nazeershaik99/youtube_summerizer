@@ -1,76 +1,131 @@
-# YouTube Video Summarizer
+This project is a **Flask-based web application** that allows users to paste a YouTube video URL, generate a **multilingual AI summary** using the **Gemini API**, and **download the summary as a PDF**. It also displays the embedded video and supports various summary styles (Academic, Creative, etc.).
 
-This is a Python application that allows you to summarize the content of a YouTube video using OpenAI's GPT-3.5 language model and Langchain. The application get the transcription provided by YouTube, chunks the Transcription with Langchain and generates a summary in the language of the youtube video.
+---
 
-## Features
-- Get the Transcription from Youtube
-- Chunks the transcriptions with Langchain
-- Summarizes transcribed text using OpenAI's GPT-3.5 model
-- Built with Streamlit for an easy-to-use web interface
+## 🚀 Features
 
-## Prerequisites
+- 🎥 YouTube video audio extraction using `yt-dlp`
+- 🧠 Transcription using OpenAI’s `Whisper`
+- ✨ Summary generation via Google Gemini Pro (v2.0 Flash)
+- 🌐 Supports multiple languages (English, Hindi, Bengali, Tamil)
+- 📄 Clean bullet-style PDF summary download (Unicode supported)
+- 📺 Embedded YouTube video preview
+- 💬 Multiple summary styles: Default, Academic, Creative, Informal
+- 🎨 TailwindCSS-powered responsive UI with loading animation
 
-Before you begin, ensure you have installed the following:
+---
 
-- Python 3.6 or above
-- [Streamlit](https://streamlit.io/)
-- [PyTube](https://pytube.io/en/latest/)
-- [OpenAI](https://beta.openai.com/docs/developer-quickstart/)
-- [python-dotenv](https://pypi.org/project/python-dotenv/)
-- [youtube-transcript-api](https://pypi.org/project/youtube-transcript-api/)
-- [Langchain](https://pypi.org/project/langchain/)
+## 🛠️ Tech Stack
 
-## Installation 
+| Component          | Technology                     |
+|-------------------|--------------------------------|
+| Backend           | Flask                          |
+| Transcription     | OpenAI Whisper                 |
+| Summarization     | Google Gemini API              |
+| YouTube Audio     | yt-dlp + ffmpeg                |
+| Frontend          | HTML, Tailwind CSS, JavaScript |
+| PDF Generation    | fpdf2 (Unicode-safe fonts)     |
 
-1. Clone this repository:
+---
+
+## 📦 Installation
+
+### 1. Clone the Repository
+
 ```bash
-git clone https://github.com/DevRico003/youtube_summarizer
-```
-2. Change into the cloned repository:
-```bash
-cd youtube_summarizer
-```
-3. Install all necessary packages:
-```bash
+git clone https://github.com/your-username/youtube-video-summarizer.git
+cd youtube-video-summarizer
+2. Set up Python Environment
+bash
+Copy
+Edit
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
-```
-4. Create a `.env` directory in your home directory (or any directory of your choice), and create in the directory `.env` a file called `openai_api` and add your OpenAI API Key:
-```bash
-OPENAI_API_KEY=your_openai_api_key
-```
-5. Change the `env_path` variable in the Python script to match the path of your `.env` file.
+3. Install FFmpeg
+Download FFmpeg: https://ffmpeg.org/download.html
 
-## Usage
+Extract and add to your system path (or update path in app.py)
 
-1. Run the script:
-```bash
-streamlit run app.py
-```
-2. Once the web application starts, open it in your web browser.
+4. Set Environment Variables
+Create a .env file in the root directory:
 
-3. Enter the link of the YouTube video you want to summarize in the provided text input.
+env
+Copy
+Edit
+GEMINI_API_KEY=your_gemini_api_key_here
+5. Run the Application
+bash
+Copy
+Edit
+python app.py
+Visit http://localhost:5000 in your browser.
 
-4. Click the "Start" button to begin the summarization process.
+📄 Usage
+Paste a YouTube video URL into the input box.
 
-   - The application will get the Transcription from Youtube
-   - It will then use GPT-3.5 and Langchain to generate a summary.
-   - The generated summary will be displayed on the web page in the language of the youtube video.
+Choose language and summary style.
 
-5. The summary will be presented in the form of an informative and factual overview of the video's content, including bullet points if possible. It will also include an introduction and conclusion phrase.
+Click "Summarize".
 
-## Example
-### Insert Youtube link, choose the language and press start
-![Example english](1.png)
-### Result
-![Example english](2.png)
-## Disclaimer
+Wait for transcription and AI processing.
 
-Please note that this application relies on the OpenAI GPT-3.5 language model, and its performance and results are subject to the capabilities of the model and the quality of the provided data. The generated summaries may not always be perfect and may require manual editing for accuracy.
+View embedded video + AI summary.
 
-## Contributing
+Click “Download PDF” to save the summary.
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+🧪 Example Output
+vbnet
+Copy
+Edit
+Title: How the Internet Works
 
-## License
+Introduction:
+In this video, we explore how the Internet functions at a fundamental level.
 
-Distributed under the MIT License. See `LICENSE` for more information.
+• The internet is a global network of networks.
+• It uses IP addresses to route data packets.
+• DNS translates domain names into IP addresses.
+• TCP/IP protocol ensures reliability and delivery.
+
+Conclusion:
+Understanding how the Internet works helps us appreciate the technology we use daily.
+📁 Project Structure
+pgsql
+Copy
+Edit
+YouTube_Video_Summarizer/
+│
+├── app.py                  # Flask backend
+├── templates/
+│   └── index.html          # Frontend UI
+├── static/                 # (Optional: Add CSS/JS here)
+├── requirements.txt
+├── summary.txt             # Temporary text file
+├── summary.pdf             # Generated PDF summary
+├── .env                    # API key (not tracked)
+└── README.md
+✅ To-Do & Improvements
+ Add user authentication (optional)
+
+ Add history of past summaries
+
+ Support video upload (non-YouTube)
+
+ Improve error handling and timeouts
+
+📄 License
+This project is licensed under the MIT License.
+
+🙏 Acknowledgements
+Google Gemini API
+
+OpenAI Whisper
+
+yt-dlp
+
+fpdf2
+
+yaml
+Copy
+Edit
